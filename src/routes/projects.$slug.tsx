@@ -81,7 +81,7 @@ function ProjectPage() {
             <div className="pt-6 border-t border-walnut/15">
               <p className="text-[11px] uppercase tracking-[0.3em] text-walnut mb-3">Scope of Work</p>
               <ul className="flex flex-wrap gap-2">
-                {project.scope.map((s) => (
+                {project.scope.map((s: string) => (
                   <li key={s} className="px-3 py-1.5 border border-walnut/25 text-xs uppercase tracking-[0.18em]">{s}</li>
                 ))}
               </ul>
