@@ -23,6 +23,7 @@ import { Route as ProjectsSlugRouteImport } from './routes/projects.$slug'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedDashboardIndexRouteImport } from './routes/_authenticated/dashboard.index'
 import { Route as AuthenticatedDashboardTestimonialsRouteImport } from './routes/_authenticated/dashboard.testimonials'
+import { Route as AuthenticatedDashboardProjectsRouteImport } from './routes/_authenticated/dashboard.projects'
 import { Route as AuthenticatedDashboardMediaRouteImport } from './routes/_authenticated/dashboard.media'
 import { Route as AuthenticatedDashboardLeadsRouteImport } from './routes/_authenticated/dashboard.leads'
 import { Route as AuthenticatedDashboardCategoriesRouteImport } from './routes/_authenticated/dashboard.categories'
@@ -102,6 +103,12 @@ const AuthenticatedDashboardTestimonialsRoute =
     path: '/testimonials',
     getParentRoute: () => AuthenticatedDashboardRoute,
   } as any)
+const AuthenticatedDashboardProjectsRoute =
+  AuthenticatedDashboardProjectsRouteImport.update({
+    id: '/projects',
+    path: '/projects',
+    getParentRoute: () => AuthenticatedDashboardRoute,
+  } as any)
 const AuthenticatedDashboardMediaRoute =
   AuthenticatedDashboardMediaRouteImport.update({
     id: '/media',
@@ -128,21 +135,21 @@ const AuthenticatedDashboardBlogsRoute =
   } as any)
 const AuthenticatedDashboardProjectsIndexRoute =
   AuthenticatedDashboardProjectsIndexRouteImport.update({
-    id: '/projects/',
-    path: '/projects/',
-    getParentRoute: () => AuthenticatedDashboardRoute,
+    id: '/',
+    path: '/',
+    getParentRoute: () => AuthenticatedDashboardProjectsRoute,
   } as any)
 const AuthenticatedDashboardProjectsNewRoute =
   AuthenticatedDashboardProjectsNewRouteImport.update({
-    id: '/projects/new',
-    path: '/projects/new',
-    getParentRoute: () => AuthenticatedDashboardRoute,
+    id: '/new',
+    path: '/new',
+    getParentRoute: () => AuthenticatedDashboardProjectsRoute,
   } as any)
 const AuthenticatedDashboardProjectsIdRoute =
   AuthenticatedDashboardProjectsIdRouteImport.update({
-    id: '/projects/$id',
-    path: '/projects/$id',
-    getParentRoute: () => AuthenticatedDashboardRoute,
+    id: '/$id',
+    path: '/$id',
+    getParentRoute: () => AuthenticatedDashboardProjectsRoute,
   } as any)
 
 export interface FileRoutesByFullPath {
@@ -161,6 +168,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/categories': typeof AuthenticatedDashboardCategoriesRoute
   '/dashboard/leads': typeof AuthenticatedDashboardLeadsRoute
   '/dashboard/media': typeof AuthenticatedDashboardMediaRoute
+  '/dashboard/projects': typeof AuthenticatedDashboardProjectsRouteWithChildren
   '/dashboard/testimonials': typeof AuthenticatedDashboardTestimonialsRoute
   '/dashboard/': typeof AuthenticatedDashboardIndexRoute
   '/dashboard/projects/$id': typeof AuthenticatedDashboardProjectsIdRoute
@@ -206,6 +214,7 @@ export interface FileRoutesById {
   '/_authenticated/dashboard/categories': typeof AuthenticatedDashboardCategoriesRoute
   '/_authenticated/dashboard/leads': typeof AuthenticatedDashboardLeadsRoute
   '/_authenticated/dashboard/media': typeof AuthenticatedDashboardMediaRoute
+  '/_authenticated/dashboard/projects': typeof AuthenticatedDashboardProjectsRouteWithChildren
   '/_authenticated/dashboard/testimonials': typeof AuthenticatedDashboardTestimonialsRoute
   '/_authenticated/dashboard/': typeof AuthenticatedDashboardIndexRoute
   '/_authenticated/dashboard/projects/$id': typeof AuthenticatedDashboardProjectsIdRoute
@@ -230,6 +239,7 @@ export interface FileRouteTypes {
     | '/dashboard/categories'
     | '/dashboard/leads'
     | '/dashboard/media'
+    | '/dashboard/projects'
     | '/dashboard/testimonials'
     | '/dashboard/'
     | '/dashboard/projects/$id'
@@ -274,6 +284,7 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard/categories'
     | '/_authenticated/dashboard/leads'
     | '/_authenticated/dashboard/media'
+    | '/_authenticated/dashboard/projects'
     | '/_authenticated/dashboard/testimonials'
     | '/_authenticated/dashboard/'
     | '/_authenticated/dashboard/projects/$id'
@@ -395,6 +406,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardTestimonialsRouteImport
       parentRoute: typeof AuthenticatedDashboardRoute
     }
+    '/_authenticated/dashboard/projects': {
+      id: '/_authenticated/dashboard/projects'
+      path: '/projects'
+      fullPath: '/dashboard/projects'
+      preLoaderRoute: typeof AuthenticatedDashboardProjectsRouteImport
+      parentRoute: typeof AuthenticatedDashboardRoute
+    }
     '/_authenticated/dashboard/media': {
       id: '/_authenticated/dashboard/media'
       path: '/media'
@@ -425,38 +443,57 @@ declare module '@tanstack/react-router' {
     }
     '/_authenticated/dashboard/projects/': {
       id: '/_authenticated/dashboard/projects/'
-      path: '/projects'
+      path: '/'
       fullPath: '/dashboard/projects/'
       preLoaderRoute: typeof AuthenticatedDashboardProjectsIndexRouteImport
-      parentRoute: typeof AuthenticatedDashboardRoute
+      parentRoute: typeof AuthenticatedDashboardProjectsRoute
     }
     '/_authenticated/dashboard/projects/new': {
       id: '/_authenticated/dashboard/projects/new'
-      path: '/projects/new'
+      path: '/new'
       fullPath: '/dashboard/projects/new'
       preLoaderRoute: typeof AuthenticatedDashboardProjectsNewRouteImport
-      parentRoute: typeof AuthenticatedDashboardRoute
+      parentRoute: typeof AuthenticatedDashboardProjectsRoute
     }
     '/_authenticated/dashboard/projects/$id': {
       id: '/_authenticated/dashboard/projects/$id'
-      path: '/projects/$id'
+      path: '/$id'
       fullPath: '/dashboard/projects/$id'
       preLoaderRoute: typeof AuthenticatedDashboardProjectsIdRouteImport
-      parentRoute: typeof AuthenticatedDashboardRoute
+      parentRoute: typeof AuthenticatedDashboardProjectsRoute
     }
   }
 }
+
+interface AuthenticatedDashboardProjectsRouteChildren {
+  AuthenticatedDashboardProjectsIdRoute: typeof AuthenticatedDashboardProjectsIdRoute
+  AuthenticatedDashboardProjectsNewRoute: typeof AuthenticatedDashboardProjectsNewRoute
+  AuthenticatedDashboardProjectsIndexRoute: typeof AuthenticatedDashboardProjectsIndexRoute
+}
+
+const AuthenticatedDashboardProjectsRouteChildren: AuthenticatedDashboardProjectsRouteChildren =
+  {
+    AuthenticatedDashboardProjectsIdRoute:
+      AuthenticatedDashboardProjectsIdRoute,
+    AuthenticatedDashboardProjectsNewRoute:
+      AuthenticatedDashboardProjectsNewRoute,
+    AuthenticatedDashboardProjectsIndexRoute:
+      AuthenticatedDashboardProjectsIndexRoute,
+  }
+
+const AuthenticatedDashboardProjectsRouteWithChildren =
+  AuthenticatedDashboardProjectsRoute._addFileChildren(
+    AuthenticatedDashboardProjectsRouteChildren,
+  )
 
 interface AuthenticatedDashboardRouteChildren {
   AuthenticatedDashboardBlogsRoute: typeof AuthenticatedDashboardBlogsRoute
   AuthenticatedDashboardCategoriesRoute: typeof AuthenticatedDashboardCategoriesRoute
   AuthenticatedDashboardLeadsRoute: typeof AuthenticatedDashboardLeadsRoute
   AuthenticatedDashboardMediaRoute: typeof AuthenticatedDashboardMediaRoute
+  AuthenticatedDashboardProjectsRoute: typeof AuthenticatedDashboardProjectsRouteWithChildren
   AuthenticatedDashboardTestimonialsRoute: typeof AuthenticatedDashboardTestimonialsRoute
   AuthenticatedDashboardIndexRoute: typeof AuthenticatedDashboardIndexRoute
-  AuthenticatedDashboardProjectsIdRoute: typeof AuthenticatedDashboardProjectsIdRoute
-  AuthenticatedDashboardProjectsNewRoute: typeof AuthenticatedDashboardProjectsNewRoute
-  AuthenticatedDashboardProjectsIndexRoute: typeof AuthenticatedDashboardProjectsIndexRoute
 }
 
 const AuthenticatedDashboardRouteChildren: AuthenticatedDashboardRouteChildren =
@@ -466,15 +503,11 @@ const AuthenticatedDashboardRouteChildren: AuthenticatedDashboardRouteChildren =
       AuthenticatedDashboardCategoriesRoute,
     AuthenticatedDashboardLeadsRoute: AuthenticatedDashboardLeadsRoute,
     AuthenticatedDashboardMediaRoute: AuthenticatedDashboardMediaRoute,
+    AuthenticatedDashboardProjectsRoute:
+      AuthenticatedDashboardProjectsRouteWithChildren,
     AuthenticatedDashboardTestimonialsRoute:
       AuthenticatedDashboardTestimonialsRoute,
     AuthenticatedDashboardIndexRoute: AuthenticatedDashboardIndexRoute,
-    AuthenticatedDashboardProjectsIdRoute:
-      AuthenticatedDashboardProjectsIdRoute,
-    AuthenticatedDashboardProjectsNewRoute:
-      AuthenticatedDashboardProjectsNewRoute,
-    AuthenticatedDashboardProjectsIndexRoute:
-      AuthenticatedDashboardProjectsIndexRoute,
   }
 
 const AuthenticatedDashboardRouteWithChildren =
