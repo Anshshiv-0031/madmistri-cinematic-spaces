@@ -70,9 +70,9 @@ function ProjectPage() {
   // increment view count (best-effort)
   useEffect(() => {
     if (fromDb && project.id) {
-      supabase.rpc("noop").then(() => {}).catch(() => {});
-      supabase.from("projects").select("view_count").eq("id", project.id).single().then(({ data }) => {
-        if (data) supabase.from("projects").update({ view_count: (data.view_count ?? 0) + 1 }).eq("id", project.id!);
+      const id = project.id;
+      supabase.from("projects").select("view_count").eq("id", id).single().then(({ data }) => {
+        if (data) supabase.from("projects").update({ view_count: (data.view_count ?? 0) + 1 }).eq("id", id).then(() => {});
       });
     }
   }, [fromDb, project.id]);
