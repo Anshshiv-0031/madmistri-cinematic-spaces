@@ -3,6 +3,7 @@ import { Visual } from "@/components/Visual";
 import { Phone, Mail, MapPin, Instagram, Facebook, MessageCircle } from "lucide-react";
 import { useState } from "react";
 import { z } from "zod";
+import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
@@ -27,9 +28,10 @@ function ContactPage() {
   const [status, setStatus] = useState<"idle" | "ok" | "err">("idle");
   const [errors, setErrors] = useState<Record<string, string>>({});
 
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const fd = new FormData(e.currentTarget);
+    const formEl = e.currentTarget;
+    const fd = new FormData(formEl);
     const parsed = schema.safeParse(Object.fromEntries(fd));
     if (!parsed.success) {
       const errs: Record<string, string> = {};
@@ -39,8 +41,16 @@ function ContactPage() {
       return;
     }
     setErrors({});
+    const { error } = await supabase.from("leads").insert({
+      name: parsed.data.name,
+      email: parsed.data.email,
+      phone: parsed.data.phone,
+      message: parsed.data.message,
+      source: "contact-form",
+    });
+    if (error) { setStatus("err"); return; }
     setStatus("ok");
-    e.currentTarget.reset();
+    formEl.reset();
   };
 
   return (

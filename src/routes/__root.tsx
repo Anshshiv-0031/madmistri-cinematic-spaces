@@ -4,6 +4,7 @@ import {
   Link,
   createRootRouteWithContext,
   useRouter,
+  useRouterState,
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
@@ -12,6 +13,7 @@ import appCss from "../styles.css?url";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { WhatsAppFab } from "@/components/WhatsAppFab";
+import { AuthProvider } from "@/lib/auth";
 
 function NotFoundComponent() {
   return (
@@ -91,14 +93,18 @@ function RootShell({ children }: { children: React.ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const path = useRouterState({ select: (r) => r.location.pathname });
+  const isAdmin = path.startsWith("/dashboard") || path.startsWith("/admin") || path === "/login";
   return (
     <QueryClientProvider client={queryClient}>
-      <Header />
-      <main className="min-h-screen">
-        <Outlet />
-      </main>
-      <Footer />
-      <WhatsAppFab />
+      <AuthProvider>
+        {!isAdmin && <Header />}
+        <main className="min-h-screen">
+          <Outlet />
+        </main>
+        {!isAdmin && <Footer />}
+        {!isAdmin && <WhatsAppFab />}
+      </AuthProvider>
     </QueryClientProvider>
   );
 }
