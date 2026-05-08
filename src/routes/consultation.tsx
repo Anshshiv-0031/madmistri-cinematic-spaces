@@ -3,6 +3,7 @@ import { Visual } from "@/components/Visual";
 import { Check } from "lucide-react";
 import { useState } from "react";
 import { z } from "zod";
+import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/consultation")({
   head: () => ({
@@ -38,7 +39,7 @@ function ConsultationPage() {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [done, setDone] = useState(false);
 
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const fd = new FormData(e.currentTarget);
     const parsed = schema.safeParse(Object.fromEntries(fd));
@@ -49,6 +50,14 @@ function ConsultationPage() {
       return;
     }
     setErrors({});
+    await supabase.from("leads").insert({
+      name: parsed.data.name,
+      email: parsed.data.email,
+      phone: parsed.data.phone,
+      business_type: parsed.data.type,
+      message: `Business: ${parsed.data.business}\nPreferred date: ${parsed.data.date}\n${parsed.data.message ?? ""}`,
+      source: "consultation-form",
+    });
     setDone(true);
   };
 
