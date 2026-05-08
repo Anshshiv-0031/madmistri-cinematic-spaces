@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Plus, Pencil, Trash2, Star } from "lucide-react";
 import { useState } from "react";
 
-export const Route = createFileRoute("/_authenticated/dashboard/projects")({
+export const Route = createFileRoute("/_authenticated/dashboard/projects/")({
   component: ProjectsList,
 });
 

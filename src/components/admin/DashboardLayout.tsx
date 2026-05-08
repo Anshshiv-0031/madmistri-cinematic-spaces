@@ -2,7 +2,8 @@ import { Link, Outlet, useRouterState, useNavigate } from "@tanstack/react-route
 import { useAuth } from "@/lib/auth";
 import { LayoutDashboard, FolderKanban, FileText, Tag, MessageSquareQuote, Inbox, Image as ImageIcon, LogOut, Home } from "lucide-react";
 
-const nav = [
+type NavItem = { to: string; label: string; icon: typeof LayoutDashboard; exact?: boolean };
+const nav: NavItem[] = [
   { to: "/dashboard", label: "Overview", icon: LayoutDashboard, exact: true },
   { to: "/dashboard/projects", label: "Projects", icon: FolderKanban },
   { to: "/dashboard/blogs", label: "Blogs", icon: FileText },
@@ -10,7 +11,7 @@ const nav = [
   { to: "/dashboard/testimonials", label: "Testimonials", icon: MessageSquareQuote },
   { to: "/dashboard/leads", label: "Leads", icon: Inbox },
   { to: "/dashboard/media", label: "Media", icon: ImageIcon },
-] as const;
+];
 
 export function DashboardLayout() {
   const { user, signOut } = useAuth();
@@ -29,7 +30,7 @@ export function DashboardLayout() {
             const active = n.exact ? path === n.to : path === n.to || path.startsWith(n.to + "/");
             const Icon = n.icon;
             return (
-              <Link key={n.to} to={n.to} className={`flex items-center gap-3 px-3 py-2.5 text-sm rounded transition ${active ? "bg-gold text-ink" : "text-bone/70 hover:text-gold hover:bg-bone/5"}`}>
+              <Link key={n.to} to={n.to as any} className={`flex items-center gap-3 px-3 py-2.5 text-sm rounded transition ${active ? "bg-gold text-ink" : "text-bone/70 hover:text-gold hover:bg-bone/5"}`}>
                 <Icon size={16} />
                 {n.label}
               </Link>
