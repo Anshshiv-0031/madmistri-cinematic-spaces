@@ -1,7 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowUpRight, Award, Hammer, MapPin, Sparkles, Truck, Clock, Compass } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
 import { Visual } from "@/components/Visual";
-import { projects } from "@/data/projects";
+import { supabase } from "@/integrations/supabase/client";
+import { projects as mockProjects } from "@/data/projects";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -21,6 +23,15 @@ const stats = [
   { k: "24", v: "Cities Across India" },
   { k: "60+", v: "Hospitality Brands" },
 ];
+
+const SERVICE_IMAGES: Record<string, string> = {
+  "Café Furniture": "https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=1200&q=80",
+  "Restaurant Furniture": "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1200&q=80",
+  "Hotel Furniture": "https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=1200&q=80",
+  "Lounge Seating": "https://images.unsplash.com/photo-1505691938895-1758d7feb511?w=1200&q=80",
+  "Premium Commercial Interiors": "https://images.unsplash.com/photo-1497366216548-37526070297c?w=1200&q=80",
+  "Custom Furniture": "https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?w=1200&q=80",
+};
 
 const services = [
   { t: "Café Furniture", d: "Bar counters, banquettes and bespoke seating designed for the slow-coffee era." },
@@ -47,19 +58,64 @@ const processSteps = [
   { n: "04", t: "Delivery & Install", d: "White-glove logistics, site finishing, handover." },
 ];
 
-const testimonials = [
-  { q: "Mad Mistri delivered a dining room that our guests photograph before they sit down. The craft is remarkable.", a: "Aarav Mehta", r: "Founder, Atelier Group" },
-  { q: "From the first sketch to install day, the team operated with the precision of a luxury brand. Our hotel feels timeless.", a: "Ishita Rao", r: "GM, Casa Mira" },
-  { q: "We've worked with three furniture houses. None come close to the level of finish and reliability of Mad Mistri.", a: "Rohan Kapoor", r: "Director, Ember Group" },
-];
+const VARIANTS = ["walnut","cafe","lounge","hotel","dining","ink","warm"] as const;
 
 function Home() {
-  const featured = projects.slice(0, 6);
+  const { data: dbProjects } = useQuery({
+    queryKey: ["home-featured-projects"],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("projects")
+        .select("slug,title,cover_image,location,categories(name)")
+        .eq("published", true)
+        .order("featured", { ascending: false })
+        .order("created_at", { ascending: false })
+        .limit(6);
+      return data ?? [];
+    },
+  });
+
+  const { data: dbTestimonials } = useQuery({
+    queryKey: ["home-testimonials"],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("testimonials")
+        .select("*")
+        .eq("published", true)
+        .order("featured", { ascending: false })
+        .limit(3);
+      return data ?? [];
+    },
+  });
+
+  const featured = (dbProjects && dbProjects.length > 0)
+    ? dbProjects.map((p: any, i: number) => ({
+        slug: p.slug, title: p.title, category: p.categories?.name ?? "Project",
+        city: p.location ?? "", cover_image: p.cover_image as string | null,
+        variant: VARIANTS[i % VARIANTS.length],
+      }))
+    : mockProjects.slice(0, 6).map((p) => ({
+        slug: p.slug, title: p.title, category: p.category, city: p.city,
+        cover_image: null as string | null, variant: p.variant,
+      }));
+
+  const testimonials = (dbTestimonials && dbTestimonials.length > 0)
+    ? dbTestimonials.map((t: any) => ({ q: t.quote, a: t.name, r: [t.role, t.company].filter(Boolean).join(", ") }))
+    : [
+        { q: "Mad Mistri delivered a dining room that our guests photograph before they sit down. The craft is remarkable.", a: "Aarav Mehta", r: "Founder, Atelier Group" },
+        { q: "From the first sketch to install day, the team operated with the precision of a luxury brand.", a: "Ishita Rao", r: "GM, Casa Mira" },
+        { q: "We've worked with three furniture houses. None come close to the level of finish and reliability of Mad Mistri.", a: "Rohan Kapoor", r: "Director, Ember Group" },
+      ];
+
   return (
     <>
       {/* HERO */}
       <section className="relative h-[100svh] min-h-[680px] w-full overflow-hidden bg-ink text-bone">
-        <Visual variant="walnut" className="absolute inset-0 animate-slow-zoom" />
+        <img
+          src="https://images.unsplash.com/photo-1505691938895-1758d7feb511?w=1920&q=80"
+          alt="Luxury commercial interior"
+          className="absolute inset-0 w-full h-full object-cover animate-slow-zoom"
+        />
         <div className="absolute inset-0 cinematic-overlay" />
         <div className="relative z-10 h-full mx-auto max-w-[1400px] px-6 md:px-10 flex flex-col justify-end pb-20 md:pb-28">
           <div className="max-w-4xl">
@@ -75,24 +131,15 @@ function Home() {
               From intimate cafés to landmark hotels — Mad Mistri designs and manufactures bespoke commercial furniture and turnkey interiors for India's most considered hospitality brands.
             </p>
             <div className="animate-fade-up delay-500 mt-10 flex flex-wrap gap-4">
-              <Link
-                to="/projects"
-                className="group inline-flex items-center gap-3 bg-bone text-ink px-7 py-4 text-xs uppercase tracking-[0.25em] hover:bg-gold transition-all duration-500"
-              >
+              <Link to="/projects" className="group inline-flex items-center gap-3 bg-bone text-ink px-7 py-4 text-xs uppercase tracking-[0.25em] hover:bg-gold transition-all duration-500">
                 View Projects
                 <ArrowUpRight size={16} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"/>
               </Link>
-              <Link
-                to="/consultation"
-                className="inline-flex items-center gap-3 border border-bone/30 text-bone px-7 py-4 text-xs uppercase tracking-[0.25em] hover:border-gold hover:text-gold transition-all duration-500"
-              >
+              <Link to="/consultation" className="inline-flex items-center gap-3 border border-bone/30 text-bone px-7 py-4 text-xs uppercase tracking-[0.25em] hover:border-gold hover:text-gold transition-all duration-500">
                 Book Consultation
               </Link>
             </div>
           </div>
-        </div>
-        <div className="absolute bottom-6 right-6 md:right-10 z-10 text-[10px] uppercase tracking-[0.3em] text-bone/50">
-          Scroll · 01 / 06
         </div>
       </section>
 
@@ -141,16 +188,15 @@ function Home() {
                 : i === 4 ? "md:col-span-3 aspect-[5/4]"
                 : "md:col-span-6 aspect-[16/7]";
               return (
-                <Link
-                  key={p.slug}
-                  to="/projects/$slug"
-                  params={{ slug: p.slug }}
-                  className={`group relative overflow-hidden ${span}`}
-                >
-                  <Visual variant={p.variant} className="absolute inset-0 transition-transform duration-[1400ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.06]" />
+                <Link key={p.slug} to="/projects/$slug" params={{ slug: p.slug }} className={`group relative overflow-hidden ${span}`}>
+                  {p.cover_image ? (
+                    <img src={p.cover_image} alt={p.title} loading="lazy" className="absolute inset-0 w-full h-full object-cover transition-transform duration-[1400ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.06]"/>
+                  ) : (
+                    <Visual variant={p.variant as any} className="absolute inset-0 transition-transform duration-[1400ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.06]" />
+                  )}
                   <div className="absolute inset-0 bg-gradient-to-t from-ink/90 via-ink/20 to-transparent" />
                   <div className="absolute inset-0 p-6 md:p-8 flex flex-col justify-end text-bone">
-                    <p className="text-[10px] uppercase tracking-[0.3em] text-gold mb-2">{p.category} · {p.city}</p>
+                    <p className="text-[10px] uppercase tracking-[0.3em] text-gold mb-2">{p.category}{p.city && ` · ${p.city}`}</p>
                     <h3 className="font-display text-2xl md:text-3xl">{p.title}</h3>
                     <span className="mt-3 inline-flex items-center gap-2 text-[11px] uppercase tracking-[0.25em] text-bone/70 group-hover:text-gold transition-colors">
                       View Project <ArrowUpRight size={14}/>
@@ -175,22 +221,21 @@ function Home() {
               </h2>
             </div>
             <p className="md:col-span-6 md:col-start-7 text-bone/60 text-base md:text-lg leading-relaxed self-end">
-              Whether you're opening a 14-seat café or a 200-key hotel, we work
-              end-to-end — from the first material moodboard to the final
-              install.
+              Whether you're opening a 14-seat café or a 200-key hotel, we work end-to-end — from the first material moodboard to the final install.
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 border-t border-bone/10">
+          <div className="grid md:grid-cols-3 gap-px bg-bone/10">
             {services.map((s, i) => (
-              <div
-                key={s.t}
-                className={`group p-8 md:p-10 border-b border-bone/10 ${i % 3 !== 2 ? "md:border-r" : ""} hover:bg-charcoal/40 transition-colors duration-500`}
-              >
-                <p className="text-[11px] uppercase tracking-[0.25em] text-gold/70 mb-6">0{i+1}</p>
-                <h3 className="font-display text-2xl md:text-3xl mb-4 group-hover:text-gold transition-colors">{s.t}</h3>
-                <p className="text-bone/60 leading-relaxed text-sm">{s.d}</p>
-              </div>
+              <Link key={s.t} to="/services" className="group relative overflow-hidden bg-ink aspect-[4/5] hover-lift">
+                <img src={SERVICE_IMAGES[s.t]} alt={s.t} loading="lazy" className="absolute inset-0 w-full h-full object-cover opacity-50 group-hover:opacity-70 group-hover:scale-105 transition-all duration-700" />
+                <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/60 to-ink/10" />
+                <div className="relative h-full p-8 md:p-10 flex flex-col justify-end">
+                  <p className="text-[11px] uppercase tracking-[0.25em] text-gold/70 mb-4">0{i+1}</p>
+                  <h3 className="font-display text-2xl md:text-3xl mb-3 group-hover:text-gold transition-colors">{s.t}</h3>
+                  <p className="text-bone/70 leading-relaxed text-sm">{s.d}</p>
+                </div>
+              </Link>
             ))}
           </div>
         </div>
@@ -219,7 +264,8 @@ function Home() {
 
       {/* PROCESS */}
       <section className="relative bg-ink text-bone py-24 md:py-36 overflow-hidden">
-        <Visual variant="ink" className="absolute inset-0 opacity-60"/>
+        <img src="https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?w=1920&q=80" alt="" className="absolute inset-0 w-full h-full object-cover opacity-25"/>
+        <div className="absolute inset-0 bg-ink/70"/>
         <div className="relative mx-auto max-w-[1400px] px-6 md:px-10">
           <p className="text-[11px] uppercase tracking-[0.3em] text-gold mb-4">The Process</p>
           <h2 className="font-display text-4xl md:text-6xl leading-[1] mb-16 max-w-2xl">
@@ -254,7 +300,7 @@ function Home() {
                 </blockquote>
                 <figcaption className="mt-8 pt-6 border-t border-bone/10">
                   <p className="font-display text-base">{t.a}</p>
-                  <p className="text-xs text-bone/60 uppercase tracking-[0.2em] mt-1">{t.r}</p>
+                  {t.r && <p className="text-xs text-bone/60 uppercase tracking-[0.2em] mt-1">{t.r}</p>}
                 </figcaption>
               </figure>
             ))}
@@ -264,7 +310,7 @@ function Home() {
 
       {/* FINAL CTA */}
       <section className="relative bg-ink text-bone overflow-hidden">
-        <Visual variant="dining" className="absolute inset-0 opacity-70"/>
+        <img src="https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=1920&q=80" alt="" className="absolute inset-0 w-full h-full object-cover opacity-40"/>
         <div className="absolute inset-0 cinematic-overlay"/>
         <div className="relative mx-auto max-w-[1400px] px-6 md:px-10 py-32 md:py-48 text-center">
           <p className="text-[11px] uppercase tracking-[0.4em] text-gold mb-8">
