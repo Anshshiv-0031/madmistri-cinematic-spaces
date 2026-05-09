@@ -1,5 +1,4 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Visual } from "@/components/Visual";
 import { ArrowUpRight } from "lucide-react";
 
 export const Route = createFileRoute("/services")({
@@ -15,19 +14,20 @@ export const Route = createFileRoute("/services")({
 });
 
 const services = [
-  { t: "Café Furniture", d: "Bar counters, banquettes, communal tables and bespoke seating designed for the slow-coffee era. Built to handle a hundred cups a day and still photograph beautifully on day 1,000.", variant: "cafe" as const, items: ["Counters & Back-bars", "Banquettes & Booths", "Communal Tables", "Bar Stools"] },
-  { t: "Restaurant Furniture", d: "Dining systems engineered for the choreography of full service — durable joinery, replaceable upholstery, predictable spacing.", variant: "dining" as const, items: ["Dining Chairs", "Tables & Tops", "Private Booths", "Service Stations"] },
-  { t: "Hotel Furniture", d: "Lobby, suite and F&B casegoods built to hospitality-grade tolerances. Marine-finished where the climate demands it. PVD-coated metals for coastal properties.", variant: "hotel" as const, items: ["Lobby Seating", "Suite Casegoods", "Wardrobes & Vanities", "Outdoor Lounges"] },
-  { t: "Lounge Seating", d: "Modular sofas, low chairs and bar stools that sculpt the mood of the room — velvet, bouclé, full-grain leather.", variant: "lounge" as const, items: ["Modular Sofas", "Lounge Chairs", "Cocktail Tables", "Bar Stools"] },
-  { t: "Premium Commercial Interiors", d: "Turnkey interior solutions — joinery, lighting, finishes and styling. One contract, one accountable studio.", variant: "ink" as const, items: ["Joinery & Cabinetry", "Lighting Curation", "Wall & Ceiling Finishes", "Styling & Handover"] },
-  { t: "Custom Furniture", d: "One-of-one pieces conceived with you and built in our Nagpur workshop. From hero chairs to chef's tables, every prototype is offered for sit-test before production.", variant: "walnut" as const, items: ["Hero Chairs", "Chef's Tables", "Statement Lighting", "Sculptural Joinery"] },
+  { t: "Café Furniture", d: "Bar counters, banquettes, communal tables and bespoke seating designed for the slow-coffee era. Built to handle a hundred cups a day and still photograph beautifully on day 1,000.", img: "https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=1600&q=80", items: ["Counters & Back-bars", "Banquettes & Booths", "Communal Tables", "Bar Stools"] },
+  { t: "Restaurant Furniture", d: "Dining systems engineered for the choreography of full service — durable joinery, replaceable upholstery, predictable spacing.", img: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1600&q=80", items: ["Dining Chairs", "Tables & Tops", "Private Booths", "Service Stations"] },
+  { t: "Hotel Furniture", d: "Lobby, suite and F&B casegoods built to hospitality-grade tolerances. Marine-finished where the climate demands it. PVD-coated metals for coastal properties.", img: "https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=1600&q=80", items: ["Lobby Seating", "Suite Casegoods", "Wardrobes & Vanities", "Outdoor Lounges"] },
+  { t: "Lounge Seating", d: "Modular sofas, low chairs and bar stools that sculpt the mood of the room — velvet, bouclé, full-grain leather.", img: "https://images.unsplash.com/photo-1505691938895-1758d7feb511?w=1600&q=80", items: ["Modular Sofas", "Lounge Chairs", "Cocktail Tables", "Bar Stools"] },
+  { t: "Premium Commercial Interiors", d: "Turnkey interior solutions — joinery, lighting, finishes and styling. One contract, one accountable studio.", img: "https://images.unsplash.com/photo-1497366216548-37526070297c?w=1600&q=80", items: ["Joinery & Cabinetry", "Lighting Curation", "Wall & Ceiling Finishes", "Styling & Handover"] },
+  { t: "Custom Furniture", d: "One-of-one pieces conceived with you and built in our Nagpur workshop. From hero chairs to chef's tables, every prototype is offered for sit-test before production.", img: "https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?w=1600&q=80", items: ["Hero Chairs", "Chef's Tables", "Statement Lighting", "Sculptural Joinery"] },
 ];
 
 function ServicesPage() {
   return (
     <>
       <section className="relative pt-40 md:pt-52 pb-20 md:pb-28 bg-ink text-bone overflow-hidden">
-        <Visual variant="ink" className="absolute inset-0 opacity-70"/>
+        <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=1920&q=80" alt="" className="absolute inset-0 w-full h-full object-cover opacity-30"/>
+        <div className="absolute inset-0 cinematic-overlay"/>
         <div className="relative mx-auto max-w-[1400px] px-6 md:px-10">
           <p className="animate-fade-up text-[11px] uppercase tracking-[0.4em] text-gold mb-6">Services</p>
           <h1 className="animate-fade-up delay-100 font-display text-5xl md:text-7xl lg:text-8xl leading-[0.95] text-balance max-w-5xl">
@@ -41,10 +41,12 @@ function ServicesPage() {
 
       <section className="bg-bone text-ink">
         {services.map((s, i) => (
-          <article key={s.t} className={`relative border-t border-walnut/15 py-20 md:py-32`}>
+          <article key={s.t} className="relative border-t border-walnut/15 py-20 md:py-32">
             <div className="mx-auto max-w-[1400px] px-6 md:px-10 grid md:grid-cols-12 gap-10 md:gap-16 items-center">
               <div className={`md:col-span-6 ${i % 2 === 1 ? "md:order-2" : ""}`}>
-                <Visual variant={s.variant} className="aspect-[4/5] md:aspect-[5/6]"/>
+                <div className="relative overflow-hidden aspect-[4/5] md:aspect-[5/6] group">
+                  <img src={s.img} alt={s.t} loading="lazy" className="absolute inset-0 w-full h-full object-cover transition-transform duration-[1400ms] group-hover:scale-[1.05]"/>
+                </div>
               </div>
               <div className="md:col-span-6">
                 <p className="text-[11px] uppercase tracking-[0.3em] text-walnut mb-4">0{i+1} · Service</p>
