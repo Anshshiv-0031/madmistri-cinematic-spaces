@@ -4,6 +4,7 @@ import { Phone, Mail, MapPin, Instagram, Facebook, MessageCircle } from "lucide-
 import { useState } from "react";
 import { z } from "zod";
 import { supabase } from "@/integrations/supabase/client";
+import { whatsappUrl } from "@/components/WhatsAppFab";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
@@ -80,7 +81,7 @@ function ContactPage() {
             <ul className="space-y-5 text-charcoal/80">
               <li className="flex items-center gap-4"><span className="w-10 h-10 grid place-items-center bg-ink text-gold rounded-full"><Phone size={16}/></span><a href="tel:+919370476464" className="hover:text-walnut">+91 93704 76464</a></li>
               <li className="flex items-center gap-4"><span className="w-10 h-10 grid place-items-center bg-ink text-gold rounded-full"><Mail size={16}/></span><a href="mailto:mail@madmistri.com" className="hover:text-walnut">mail@madmistri.com</a></li>
-              <li className="flex items-center gap-4"><span className="w-10 h-10 grid place-items-center bg-ink text-gold rounded-full"><MessageCircle size={16}/></span><a href="https://wa.me/919370476464" target="_blank" rel="noreferrer" className="hover:text-walnut">WhatsApp Studio</a></li>
+              <li className="flex items-center gap-4"><span className="w-10 h-10 grid place-items-center bg-ink text-gold rounded-full"><MessageCircle size={16}/></span><a href={whatsappUrl()} target="_blank" rel="noopener noreferrer" className="hover:text-walnut">WhatsApp Studio</a></li>
               <li className="flex items-center gap-4"><span className="w-10 h-10 grid place-items-center bg-ink text-gold rounded-full"><MapPin size={16}/></span><span>Mon — Sat · 10am — 7pm</span></li>
             </ul>
             <div className="flex gap-4">
