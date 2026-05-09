@@ -1,20 +1,25 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { FolderKanban, Inbox, Eye, FileText } from "lucide-react";
+import { FolderKanban, Inbox, Eye, FileText, MessageSquareQuote, Tags, Star, Sparkles } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/dashboard/")({
   component: Overview,
 });
 
+const SERVICES_COUNT = 6; // Café, Restaurant, Hotel, Lounge, Commercial Interiors, Custom
+
 function Overview() {
   const stats = useQuery({
     queryKey: ["dashboard-stats"],
     queryFn: async () => {
-      const [projects, leads, blogs, recentLeads, topProjects] = await Promise.all([
+      const [projects, leads, blogs, testimonials, categories, featured, recentLeads, topProjects] = await Promise.all([
         supabase.from("projects").select("id", { count: "exact", head: true }),
         supabase.from("leads").select("id", { count: "exact", head: true }),
         supabase.from("blogs").select("id", { count: "exact", head: true }),
+        supabase.from("testimonials").select("id", { count: "exact", head: true }),
+        supabase.from("categories").select("id", { count: "exact", head: true }),
+        supabase.from("projects").select("id", { count: "exact", head: true }).eq("featured", true),
         supabase.from("leads").select("*").order("created_at", { ascending: false }).limit(5),
         supabase.from("projects").select("id,title,slug,view_count").order("view_count", { ascending: false }).limit(5),
       ]);
@@ -22,6 +27,9 @@ function Overview() {
         projects: projects.count ?? 0,
         leads: leads.count ?? 0,
         blogs: blogs.count ?? 0,
+        testimonials: testimonials.count ?? 0,
+        categories: categories.count ?? 0,
+        featured: featured.count ?? 0,
         recentLeads: recentLeads.data ?? [],
         topProjects: topProjects.data ?? [],
       };
@@ -30,9 +38,13 @@ function Overview() {
 
   const cards = [
     { label: "Projects", value: stats.data?.projects ?? "–", icon: FolderKanban },
-    { label: "Total Leads", value: stats.data?.leads ?? "–", icon: Inbox },
+    { label: "Featured", value: stats.data?.featured ?? "–", icon: Star },
+    { label: "Categories", value: stats.data?.categories ?? "–", icon: Tags },
+    { label: "Services", value: SERVICES_COUNT, icon: Sparkles },
     { label: "Blogs", value: stats.data?.blogs ?? "–", icon: FileText },
-    { label: "Top View Count", value: stats.data?.topProjects[0]?.view_count ?? 0, icon: Eye },
+    { label: "Testimonials", value: stats.data?.testimonials ?? "–", icon: MessageSquareQuote },
+    { label: "Total Leads", value: stats.data?.leads ?? "–", icon: Inbox },
+    { label: "Top Views", value: stats.data?.topProjects[0]?.view_count ?? 0, icon: Eye },
   ];
 
   return (
