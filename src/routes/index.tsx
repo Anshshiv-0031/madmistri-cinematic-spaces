@@ -193,7 +193,7 @@ function Home() {
 
         {/* Scroll cue */}
         <div className="absolute bottom-24 md:bottom-28 left-1/2 -translate-x-1/2 z-10 hidden sm:flex flex-col items-center gap-3 animate-fade-in delay-700">
-          <span className="absolute inset-x-[-1px] top-0 h-4 bg-gold animate-scroll-hint mb-0 mt-[40px]"> —  Solutions</span>
+          <span className="absolute inset-x-[-1px] top-0 h-4 bg-gold animate-scroll-hint mb-0 mt-[40px] my-0"> </span>
           <span className="relative block w-px h-10 bg-bone/20 overflow-hidden">
             <span className="absolute inset-x-[-1px] top-0 h-4 bg-gold animate-scroll-hint" />
           </span>
