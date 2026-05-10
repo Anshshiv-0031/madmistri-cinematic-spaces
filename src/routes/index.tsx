@@ -109,36 +109,112 @@ function Home() {
 
   return (
     <>
-      {/* HERO */}
-      <section className="relative h-[100svh] min-h-[680px] w-full overflow-hidden bg-ink text-bone">
-        <img
-          src="https://images.unsplash.com/photo-1505691938895-1758d7feb511?w=1920&q=80"
-          alt="Luxury commercial interior"
-          className="absolute inset-0 w-full h-full object-cover animate-slow-zoom"
-        />
-        <div className="absolute inset-0 cinematic-overlay" />
-        <div className="relative z-10 h-full mx-auto max-w-[1400px] px-6 md:px-10 flex flex-col justify-end pb-20 md:pb-28">
-          <div className="max-w-4xl">
-            <p className="animate-fade-up text-[11px] uppercase tracking-[0.4em] text-gold mb-6">
-              <span className="inline-block w-10 h-px bg-gold align-middle mr-3" />
+      {/* HERO — cinematic luxury */}
+      <section className="relative h-[100svh] min-h-[720px] w-full overflow-hidden bg-ink text-bone">
+        {/* Layered crossfading background images with ken-burns */}
+        <div className="absolute inset-0">
+          {[
+            "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=2000&q=85",
+            "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=2000&q=85",
+            "https://images.unsplash.com/photo-1551218808-94e220e084d2?w=2000&q=85",
+          ].map((src, i) => (
+            <img
+              key={src}
+              src={src}
+              alt=""
+              aria-hidden={i > 0}
+              loading={i === 0 ? "eager" : "lazy"}
+              className="absolute inset-0 w-full h-full object-cover will-change-transform"
+              style={{
+                animation: `hero-img-cycle 18s ease-in-out ${i * 6}s infinite, ken-burns 22s ease-in-out ${i * 2}s infinite alternate`,
+                opacity: i === 0 ? 1 : 0,
+              }}
+            />
+          ))}
+        </div>
+
+        {/* Cinematic vignette + grain */}
+        <div className="absolute inset-0 hero-vignette" />
+        <div className="absolute inset-0 grain pointer-events-none" />
+
+        {/* Floating ambient gold orbs */}
+        <div aria-hidden className="pointer-events-none absolute -top-32 -left-32 w-[42rem] h-[42rem] rounded-full blur-3xl animate-glow-pulse"
+             style={{ background: "radial-gradient(circle, rgba(199,166,106,0.3), transparent 60%)" }} />
+        <div aria-hidden className="pointer-events-none absolute bottom-[-12rem] right-[-12rem] w-[38rem] h-[38rem] rounded-full blur-3xl animate-float-soft"
+             style={{ background: "radial-gradient(circle, rgba(199,166,106,0.18), transparent 65%)", animationDelay: "1.5s" }} />
+
+        {/* Light sweep */}
+        <div aria-hidden className="pointer-events-none absolute inset-y-0 left-0 w-1/3 opacity-25 mix-blend-screen blur-2xl animate-light-sweep"
+             style={{ background: "linear-gradient(90deg, transparent, rgba(246,242,236,0.7), transparent)" }} />
+
+        {/* Top hairline */}
+        <div aria-hidden className="absolute top-0 left-0 right-0 h-px gold-line opacity-60" />
+
+        {/* Content */}
+        <div className="relative z-10 h-full mx-auto max-w-[1400px] px-6 md:px-10 flex flex-col justify-end pb-28 md:pb-36">
+          <div className="max-w-5xl">
+            <p className="animate-fade-up text-[11px] uppercase tracking-[0.45em] text-gold mb-8 flex items-center gap-3">
+              <span className="inline-block w-12 h-px bg-gold" />
               Luxury Commercial Interiors · Est. India
             </p>
-            <h1 className="animate-fade-up delay-100 font-display text-[44px] sm:text-6xl md:text-7xl lg:text-[88px] leading-[0.95] text-balance">
-              Crafting luxury spaces<br/>
-              that leave <span className="italic text-gold">lasting impressions.</span>
+            <h1 className="font-display leading-[0.9] text-balance text-shadow-cinema text-[46px] sm:text-6xl md:text-7xl lg:text-[104px]">
+              <span className="block animate-fade-up delay-100">Crafting luxury spaces</span>
+              <span className="block animate-fade-up delay-300">
+                that leave{" "}
+                <span className="italic text-gold relative inline-block">
+                  lasting impressions.
+                  <span aria-hidden className="absolute -bottom-2 left-0 right-0 h-px bg-gradient-to-r from-transparent via-gold to-transparent" />
+                </span>
+              </span>
             </h1>
-            <p className="animate-fade-up delay-300 mt-8 max-w-xl text-bone/70 text-base md:text-lg leading-relaxed">
+            <p className="animate-fade-up delay-500 mt-10 max-w-xl text-bone/85 text-base md:text-lg leading-relaxed text-shadow-cinema">
               From intimate cafés to landmark hotels — Mad Mistri designs and manufactures bespoke commercial furniture and turnkey interiors for India's most considered hospitality brands.
             </p>
-            <div className="animate-fade-up delay-500 mt-10 flex flex-wrap gap-4">
-              <Link to="/projects" className="group inline-flex items-center gap-3 bg-bone text-ink px-7 py-4 text-xs uppercase tracking-[0.25em] hover:bg-gold transition-all duration-500">
-                View Projects
-                <ArrowUpRight size={16} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"/>
+            <div className="animate-fade-up delay-700 mt-12 flex flex-wrap gap-4">
+              <Link
+                to="/projects"
+                className="group relative inline-flex items-center gap-3 bg-gold text-ink px-8 py-4 text-xs uppercase tracking-[0.3em] font-medium overflow-hidden transition-all duration-500 hover:gold-glow hover:-translate-y-0.5"
+              >
+                <span className="relative z-10">View Projects</span>
+                <ArrowUpRight size={16} className="relative z-10 transition-transform duration-500 group-hover:translate-x-1 group-hover:-translate-y-1" />
+                <span aria-hidden className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-out"
+                      style={{ background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent)" }} />
               </Link>
-              <Link to="/consultation" className="inline-flex items-center gap-3 border border-bone/30 text-bone px-7 py-4 text-xs uppercase tracking-[0.25em] hover:border-gold hover:text-gold transition-all duration-500">
+              <Link
+                to="/consultation"
+                className="group relative inline-flex items-center gap-3 glass-dark text-bone px-8 py-4 text-xs uppercase tracking-[0.3em] transition-all duration-500 hover:border-gold hover:text-gold hover:-translate-y-0.5"
+              >
                 Book Consultation
+                <span aria-hidden className="w-1.5 h-1.5 rounded-full bg-gold transition-transform duration-500 group-hover:scale-150" />
               </Link>
             </div>
+          </div>
+        </div>
+
+        {/* Scroll cue */}
+        <div className="absolute bottom-24 md:bottom-28 left-1/2 -translate-x-1/2 z-10 hidden sm:flex flex-col items-center gap-3 animate-fade-in delay-700">
+          <span className="text-[10px] uppercase tracking-[0.4em] text-bone/60">Scroll to Explore</span>
+          <span className="relative block w-px h-10 bg-bone/20 overflow-hidden">
+            <span className="absolute inset-x-[-1px] top-0 h-4 bg-gold animate-scroll-hint" />
+          </span>
+        </div>
+
+        {/* Bottom feature ribbon */}
+        <div className="absolute bottom-0 inset-x-0 z-10 hidden md:block border-t border-bone/10 glass-dark">
+          <div className="mx-auto max-w-[1400px] px-10 py-5 grid grid-cols-3 gap-8">
+            {[
+              { k: "Premium", v: "Furniture" },
+              { k: "Bespoke", v: "Interiors" },
+              { k: "End-to-End", v: "Turnkey Solutions" },
+            ].map((f) => (
+              <div key={f.v} className="flex items-center gap-3">
+                <span className="w-1.5 h-1.5 rounded-full bg-gold animate-glow-pulse" />
+                <p className="text-[11px] uppercase tracking-[0.3em]">
+                  <span className="text-gold">{f.k}</span>
+                  <span className="text-bone/60"> — {f.v}</span>
+                </p>
+              </div>
+            ))}
           </div>
         </div>
       </section>

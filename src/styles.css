@@ -174,10 +174,61 @@
     100% { transform: translateX(-50%); }
   }
 
+  @keyframes ken-burns {
+    0% { transform: scale(1.15) translate(-1.5%, -1%); }
+    100% { transform: scale(1.28) translate(1.5%, 1%); }
+  }
+  @keyframes float-soft {
+    0%, 100% { transform: translateY(0) translateX(0); }
+    50% { transform: translateY(-14px) translateX(6px); }
+  }
+  @keyframes glow-pulse {
+    0%, 100% { opacity: 0.35; transform: scale(1); }
+    50% { opacity: 0.7; transform: scale(1.08); }
+  }
+  @keyframes light-sweep {
+    0% { transform: translateX(-120%) skewX(-12deg); }
+    100% { transform: translateX(220%) skewX(-12deg); }
+  }
+  @keyframes hero-img-cycle {
+    0%, 28% { opacity: 1; }
+    33%, 95% { opacity: 0; }
+    100% { opacity: 1; }
+  }
+  @keyframes scroll-hint {
+    0% { transform: translateY(-6px); opacity: 0.2; }
+    50% { opacity: 1; }
+    100% { transform: translateY(8px); opacity: 0.2; }
+  }
+  @keyframes reveal-mask {
+    0% { clip-path: inset(0 100% 0 0); }
+    100% { clip-path: inset(0 0 0 0); }
+  }
+
   .animate-fade-up { animation: fade-up 0.9s cubic-bezier(0.22, 1, 0.36, 1) both; }
   .animate-fade-in { animation: fade-in 1.2s ease-out both; }
   .animate-slow-zoom { animation: slow-zoom 8s ease-out both; }
+  .animate-ken-burns { animation: ken-burns 18s ease-in-out infinite alternate; }
+  .animate-float-soft { animation: float-soft 9s ease-in-out infinite; }
+  .animate-glow-pulse { animation: glow-pulse 6s ease-in-out infinite; }
+  .animate-light-sweep { animation: light-sweep 7s ease-in-out infinite; }
+  .animate-scroll-hint { animation: scroll-hint 2.2s ease-in-out infinite; }
+  .animate-reveal { animation: reveal-mask 1.4s cubic-bezier(0.77,0,0.18,1) both; }
   .animate-marquee { animation: marquee 40s linear infinite; }
+
+  .text-shadow-cinema {
+    text-shadow: 0 2px 30px rgba(0,0,0,0.55), 0 1px 2px rgba(0,0,0,0.5);
+  }
+  .hero-vignette {
+    background:
+      radial-gradient(120% 80% at 70% 40%, transparent 0%, rgba(0,0,0,0.35) 60%, rgba(0,0,0,0.85) 100%),
+      linear-gradient(90deg, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.55) 35%, rgba(0,0,0,0.15) 65%, rgba(0,0,0,0.5) 100%),
+      linear-gradient(180deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.2) 40%, rgba(0,0,0,0.95) 100%);
+  }
+  .gold-glow {
+    box-shadow: 0 10px 40px -10px color-mix(in oklab, var(--gold) 65%, transparent),
+                0 0 0 1px color-mix(in oklab, var(--gold) 40%, transparent) inset;
+  }
 
   .delay-100 { animation-delay: 0.1s; }
   .delay-200 { animation-delay: 0.2s; }
