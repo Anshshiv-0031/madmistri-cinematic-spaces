@@ -105,6 +105,7 @@ function RootComponent() {
         </main>
         {!isAdmin && <Footer />}
         {!isAdmin && <WhatsAppFab />}
+        <Toaster theme="dark" position="bottom-right" richColors closeButton />
       </AuthProvider>
     </QueryClientProvider>
   );
