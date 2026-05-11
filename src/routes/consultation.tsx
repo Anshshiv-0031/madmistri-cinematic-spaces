@@ -1,9 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Visual } from "@/components/Visual";
-import { Check } from "lucide-react";
+import { Check, Loader2 } from "lucide-react";
 import { useState } from "react";
 import { z } from "zod";
 import { supabase } from "@/integrations/supabase/client";
+import { whatsappUrl } from "@/components/WhatsAppFab";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/consultation")({
   head: () => ({
