@@ -110,13 +110,13 @@ function Home() {
   return (
     <>
       {/* HERO — cinematic luxury */}
-      <section className="relative h-[100svh] min-h-[720px] w-full overflow-hidden bg-ink text-bone">
-        {/* Layered crossfading background images with ken-burns */}
+      <section className="relative min-h-[100svh] w-full overflow-hidden bg-ink text-bone">
+        {/* Layered crossfading background images with ken-burns — luxury hospitality interiors */}
         <div className="absolute inset-0">
           {[
-            "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=2000&q=85",
-            "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=2000&q=85",
-            "https://images.unsplash.com/photo-1551218808-94e220e084d2?w=2000&q=85",
+            "https://images.unsplash.com/photo-1559329007-40df8a9345d8?w=2000&q=85", // moody restaurant
+            "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=2000&q=85", // dim luxury restaurant
+            "https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=2000&q=85", // hotel lounge
           ].map((src, i) => (
             <img
               key={src}
