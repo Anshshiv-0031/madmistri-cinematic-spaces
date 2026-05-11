@@ -28,6 +28,7 @@ const schema = z.object({
 
 function ContactPage() {
   const [status, setStatus] = useState<"idle" | "ok" | "err">("idle");
+  const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -40,9 +41,11 @@ function ContactPage() {
       parsed.error.issues.forEach((i) => { errs[i.path[0] as string] = i.message; });
       setErrors(errs);
       setStatus("err");
+      toast.error("Please check the highlighted fields.");
       return;
     }
     setErrors({});
+    setLoading(true);
     const { error } = await supabase.from("leads").insert({
       name: parsed.data.name,
       email: parsed.data.email,
@@ -50,9 +53,21 @@ function ContactPage() {
       message: parsed.data.message,
       source: "contact-form",
     });
-    if (error) { setStatus("err"); return; }
+    setLoading(false);
+    if (error) { setStatus("err"); toast.error("Something went wrong. Please try again."); return; }
     setStatus("ok");
     formEl.reset();
+    toast.success("Inquiry received — opening WhatsApp…");
+    const waMessage = `Hello Mad Mistri, I would like to discuss a commercial furniture project.
+
+Name: ${parsed.data.name}
+Phone: ${parsed.data.phone}
+Email: ${parsed.data.email}
+
+${parsed.data.message}`;
+    setTimeout(() => {
+      window.open(whatsappUrl(waMessage), "_blank", "noopener,noreferrer");
+    }, 800);
   };
 
   return (
