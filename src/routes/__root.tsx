@@ -14,6 +14,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { WhatsAppFab } from "@/components/WhatsAppFab";
 import { AuthProvider } from "@/lib/auth";
+import { Toaster } from "sonner";
 
 function NotFoundComponent() {
   return (
