@@ -1,9 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Visual } from "@/components/Visual";
-import { Check } from "lucide-react";
+import { Check, Loader2 } from "lucide-react";
 import { useState } from "react";
 import { z } from "zod";
 import { supabase } from "@/integrations/supabase/client";
+import { whatsappUrl } from "@/components/WhatsAppFab";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/consultation")({
   head: () => ({
@@ -38,6 +40,7 @@ function ConsultationPage() {
   const [step, setStep] = useState(0);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [done, setDone] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -47,10 +50,12 @@ function ConsultationPage() {
       const errs: Record<string, string> = {};
       parsed.error.issues.forEach((i) => { errs[i.path[0] as string] = i.message ?? "Required"; });
       setErrors(errs);
+      toast.error("Please fix the highlighted fields.");
       return;
     }
     setErrors({});
-    await supabase.from("leads").insert({
+    setLoading(true);
+    const { error } = await supabase.from("leads").insert({
       name: parsed.data.name,
       email: parsed.data.email,
       phone: parsed.data.phone,
@@ -58,7 +63,25 @@ function ConsultationPage() {
       message: `Business: ${parsed.data.business}\nPreferred date: ${parsed.data.date}\n${parsed.data.message ?? ""}`,
       source: "consultation-form",
     });
+    setLoading(false);
+    if (error) {
+      toast.error("Something went wrong. Please try again.");
+      return;
+    }
+    toast.success("Inquiry received — opening WhatsApp…");
     setDone(true);
+
+    const waMessage = `Hello Mad Mistri, I would like to discuss a commercial furniture project.
+
+Name: ${parsed.data.name}
+Phone: ${parsed.data.phone}
+Email: ${parsed.data.email}
+Business: ${parsed.data.business} (${parsed.data.type})
+Preferred date: ${parsed.data.date}
+${parsed.data.message ? `\nBrief: ${parsed.data.message}` : ""}`;
+    setTimeout(() => {
+      window.open(whatsappUrl(waMessage), "_blank", "noopener,noreferrer");
+    }, 800);
   };
 
   return (
@@ -100,10 +123,21 @@ function ConsultationPage() {
 
           <div className="md:col-span-8">
             {done ? (
-              <div className="bg-ink text-bone p-12 md:p-16 text-center">
-                <p className="text-[11px] uppercase tracking-[0.3em] text-gold mb-4">Received</p>
-                <h2 className="font-display text-4xl md:text-5xl mb-4">Thank you.</h2>
-                <p className="text-bone/60 max-w-md mx-auto">A member of our studio will reach out within one working day to confirm your consultation.</p>
+              <div className="bg-ink text-bone p-10 sm:p-12 md:p-16 text-center animate-fade-up">
+                <div className="mx-auto w-16 h-16 rounded-full border border-gold/40 grid place-items-center mb-6 animate-glow-pulse">
+                  <Check size={28} className="text-gold" />
+                </div>
+                <p className="text-[11px] uppercase tracking-[0.3em] text-gold mb-3">Inquiry Received</p>
+                <h2 className="font-display text-3xl sm:text-4xl md:text-5xl mb-4">Thank you.</h2>
+                <p className="text-bone/70 max-w-md mx-auto mb-8">We've opened a WhatsApp chat with the studio so we can confirm details right away. Our team will respond within one working day.</p>
+                <a
+                  href={whatsappUrl("Hello Mad Mistri, I would like to discuss a commercial furniture project.")}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-3 bg-gold text-ink px-7 py-4 text-xs uppercase tracking-[0.25em] hover:bg-bone transition-all"
+                >
+                  Open WhatsApp Chat →
+                </a>
               </div>
             ) : (
               <form onSubmit={onSubmit} className="bg-ink text-bone p-8 md:p-12">
@@ -149,9 +183,11 @@ function ConsultationPage() {
                       <label className="block text-[10px] uppercase tracking-[0.3em] text-bone/50 mb-2">Project Brief (optional)</label>
                       <textarea name="message" rows={4} maxLength={1000} className="w-full bg-transparent border-b border-bone/20 py-3 text-base text-bone focus:outline-none focus:border-gold transition-colors resize-none"/>
                     </div>
-                    <div className="flex gap-3">
-                      <button type="button" onClick={() => setStep(0)} className="border border-bone/30 text-bone px-7 py-4 text-xs uppercase tracking-[0.25em] hover:border-gold hover:text-gold transition-all">← Back</button>
-                      <button type="submit" className="bg-gold text-ink px-7 py-4 text-xs uppercase tracking-[0.25em] hover:bg-bone transition-all">Book Consultation</button>
+                    <div className="flex flex-wrap gap-3">
+                      <button type="button" disabled={loading} onClick={() => setStep(0)} className="border border-bone/30 text-bone px-7 py-4 text-xs uppercase tracking-[0.25em] hover:border-gold hover:text-gold transition-all disabled:opacity-50">← Back</button>
+                      <button type="submit" disabled={loading} className="inline-flex items-center gap-3 bg-gold text-ink px-7 py-4 text-xs uppercase tracking-[0.25em] hover:bg-bone transition-all disabled:opacity-70">
+                        {loading ? (<><Loader2 size={14} className="animate-spin" /> Sending…</>) : "Book Consultation"}
+                      </button>
                     </div>
                   </div>
                 )}

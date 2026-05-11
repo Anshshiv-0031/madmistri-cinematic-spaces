@@ -1,10 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Visual } from "@/components/Visual";
-import { Phone, Mail, MapPin, Instagram, Facebook, MessageCircle } from "lucide-react";
+import { Phone, Mail, MapPin, Instagram, Facebook, MessageCircle, Loader2, Check } from "lucide-react";
 import { useState } from "react";
 import { z } from "zod";
 import { supabase } from "@/integrations/supabase/client";
 import { whatsappUrl } from "@/components/WhatsAppFab";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
@@ -27,6 +28,7 @@ const schema = z.object({
 
 function ContactPage() {
   const [status, setStatus] = useState<"idle" | "ok" | "err">("idle");
+  const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -39,9 +41,11 @@ function ContactPage() {
       parsed.error.issues.forEach((i) => { errs[i.path[0] as string] = i.message; });
       setErrors(errs);
       setStatus("err");
+      toast.error("Please check the highlighted fields.");
       return;
     }
     setErrors({});
+    setLoading(true);
     const { error } = await supabase.from("leads").insert({
       name: parsed.data.name,
       email: parsed.data.email,
@@ -49,9 +53,21 @@ function ContactPage() {
       message: parsed.data.message,
       source: "contact-form",
     });
-    if (error) { setStatus("err"); return; }
+    setLoading(false);
+    if (error) { setStatus("err"); toast.error("Something went wrong. Please try again."); return; }
     setStatus("ok");
     formEl.reset();
+    toast.success("Inquiry received — opening WhatsApp…");
+    const waMessage = `Hello Mad Mistri, I would like to discuss a commercial furniture project.
+
+Name: ${parsed.data.name}
+Phone: ${parsed.data.phone}
+Email: ${parsed.data.email}
+
+${parsed.data.message}`;
+    setTimeout(() => {
+      window.open(whatsappUrl(waMessage), "_blank", "noopener,noreferrer");
+    }, 800);
   };
 
   return (
@@ -111,10 +127,12 @@ function ContactPage() {
               <textarea name="message" rows={4} maxLength={1000} className="w-full bg-transparent border-b border-bone/20 py-3 text-base text-bone focus:outline-none focus:border-gold transition-colors resize-none"/>
               {errors.message && <p className="text-xs text-destructive mt-1">{errors.message}</p>}
             </div>
-            <button type="submit" className="mt-4 inline-flex items-center gap-3 bg-gold text-ink px-7 py-4 text-xs uppercase tracking-[0.25em] hover:bg-bone transition-all duration-500">
-              Send Inquiry
+            <button type="submit" disabled={loading} className="mt-4 inline-flex items-center gap-3 bg-gold text-ink px-7 py-4 text-xs uppercase tracking-[0.25em] hover:bg-bone transition-all duration-500 disabled:opacity-70">
+              {loading ? (<><Loader2 size={14} className="animate-spin"/> Sending…</>) : "Send Inquiry"}
             </button>
-            {status === "ok" && <p className="text-sm text-gold">Thank you — we'll be in touch within one working day.</p>}
+            {status === "ok" && (
+              <p className="text-sm text-gold inline-flex items-center gap-2"><Check size={14}/> Thank you — opening WhatsApp to continue the conversation.</p>
+            )}
           </form>
         </div>
       </section>

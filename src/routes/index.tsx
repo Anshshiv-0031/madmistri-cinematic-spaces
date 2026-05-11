@@ -110,13 +110,13 @@ function Home() {
   return (
     <>
       {/* HERO — cinematic luxury */}
-      <section className="relative h-[100svh] min-h-[720px] w-full overflow-hidden bg-ink text-bone">
-        {/* Layered crossfading background images with ken-burns */}
+      <section className="relative min-h-[100svh] w-full overflow-hidden bg-ink text-bone">
+        {/* Layered crossfading background images with ken-burns — luxury hospitality interiors */}
         <div className="absolute inset-0">
           {[
-            "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=2000&q=85",
-            "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=2000&q=85",
-            "https://images.unsplash.com/photo-1551218808-94e220e084d2?w=2000&q=85",
+            "https://images.unsplash.com/photo-1559329007-40df8a9345d8?w=2000&q=85", // moody restaurant
+            "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=2000&q=85", // dim luxury restaurant
+            "https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=2000&q=85", // hotel lounge
           ].map((src, i) => (
             <img
               key={src}
@@ -151,13 +151,13 @@ function Home() {
         <div aria-hidden className="absolute top-0 left-0 right-0 h-px gold-line opacity-60" />
 
         {/* Content */}
-        <div className="relative z-10 h-full mx-auto max-w-[1400px] px-6 md:px-10 flex flex-col justify-end pb-28 md:pb-36">
+        <div className="relative z-10 min-h-[100svh] mx-auto max-w-[1400px] px-6 md:px-10 flex flex-col justify-end pt-32 pb-32 sm:pb-36 md:pb-40">
           <div className="max-w-5xl">
-            <p className="animate-fade-up text-[11px] uppercase tracking-[0.45em] text-gold mb-8 flex items-center gap-3">
-              <span className="inline-block w-12 h-px bg-gold" />
-              Luxury Commercial Interiors · Est. India
+            <p className="animate-fade-up text-[10px] sm:text-[11px] uppercase tracking-[0.35em] sm:tracking-[0.45em] text-gold mb-6 sm:mb-8 flex items-center gap-3">
+              <span className="inline-block w-8 sm:w-12 h-px bg-gold" />
+              <span className="leading-snug">Luxury Commercial Interiors · Est. India</span>
             </p>
-            <h1 className="font-display leading-[0.9] text-balance text-shadow-cinema text-[46px] sm:text-6xl md:text-7xl lg:text-[104px]">
+            <h1 className="font-display leading-[0.95] sm:leading-[0.9] text-balance text-shadow-cinema text-[34px] xs:text-[40px] sm:text-5xl md:text-6xl lg:text-7xl xl:text-[96px]">
               <span className="block animate-fade-up delay-100">Crafting luxury spaces</span>
               <span className="block animate-fade-up delay-300">
                 that leave{" "}
@@ -167,13 +167,13 @@ function Home() {
                 </span>
               </span>
             </h1>
-            <p className="animate-fade-up delay-500 mt-10 max-w-xl text-bone/85 text-base md:text-lg leading-relaxed text-shadow-cinema">
+            <p className="animate-fade-up delay-500 mt-6 sm:mt-8 md:mt-10 max-w-xl text-bone/85 text-sm sm:text-base md:text-lg leading-relaxed text-shadow-cinema">
               From intimate cafés to landmark hotels — Mad Mistri designs and manufactures bespoke commercial furniture and turnkey interiors for India's most considered hospitality brands.
             </p>
-            <div className="animate-fade-up delay-700 mt-12 flex flex-wrap gap-4">
+            <div className="animate-fade-up delay-700 mt-8 sm:mt-10 md:mt-12 flex flex-wrap gap-3 sm:gap-4">
               <Link
                 to="/projects"
-                className="group relative inline-flex items-center gap-3 bg-gold text-ink px-8 py-4 text-xs uppercase tracking-[0.3em] font-medium overflow-hidden transition-all duration-500 hover:gold-glow hover:-translate-y-0.5"
+                className="group relative inline-flex items-center gap-2 sm:gap-3 bg-gold text-ink px-6 sm:px-8 py-3.5 sm:py-4 text-[11px] sm:text-xs uppercase tracking-[0.25em] sm:tracking-[0.3em] font-medium overflow-hidden transition-all duration-500 hover:gold-glow hover:-translate-y-0.5"
               >
                 <span className="relative z-10">View Projects</span>
                 <ArrowUpRight size={16} className="relative z-10 transition-transform duration-500 group-hover:translate-x-1 group-hover:-translate-y-1" />
@@ -182,7 +182,7 @@ function Home() {
               </Link>
               <Link
                 to="/consultation"
-                className="group relative inline-flex items-center gap-3 glass-dark text-bone px-8 py-4 text-xs uppercase tracking-[0.3em] transition-all duration-500 hover:border-gold hover:text-gold hover:-translate-y-0.5"
+                className="group relative inline-flex items-center gap-2 sm:gap-3 glass-dark text-bone px-6 sm:px-8 py-3.5 sm:py-4 text-[11px] sm:text-xs uppercase tracking-[0.25em] sm:tracking-[0.3em] transition-all duration-500 hover:border-gold hover:text-gold hover:-translate-y-0.5"
               >
                 Book Consultation
                 <span aria-hidden className="w-1.5 h-1.5 rounded-full bg-gold transition-transform duration-500 group-hover:scale-150" />
@@ -192,8 +192,7 @@ function Home() {
         </div>
 
         {/* Scroll cue */}
-        <div className="absolute bottom-24 md:bottom-28 left-1/2 -translate-x-1/2 z-10 hidden sm:flex flex-col items-center gap-3 animate-fade-in delay-700">
-          <span className="absolute inset-x-[-1px] top-0 h-4 bg-gold animate-scroll-hint mb-0 mt-[40px] my-0"> </span>
+        <div className="absolute bottom-24 md:bottom-28 left-1/2 -translate-x-1/2 z-10 hidden sm:flex flex-col items-center gap-3 animate-fade-in delay-700 pointer-events-none">
           <span className="relative block w-px h-10 bg-bone/20 overflow-hidden">
             <span className="absolute inset-x-[-1px] top-0 h-4 bg-gold animate-scroll-hint" />
           </span>
@@ -229,11 +228,15 @@ function Home() {
             </div>
           ))}
         </div>
-        <div className="border-t border-bone/10 overflow-hidden">
-          <div className="flex gap-16 py-8 animate-marquee whitespace-nowrap text-bone/40">
+        <div className="border-t border-bone/10 overflow-hidden relative">
+          <div aria-hidden className="pointer-events-none absolute inset-y-0 left-0 w-24 md:w-40 z-10 bg-gradient-to-r from-ink to-transparent" />
+          <div aria-hidden className="pointer-events-none absolute inset-y-0 right-0 w-24 md:w-40 z-10 bg-gradient-to-l from-ink to-transparent" />
+          <div className="flex gap-10 md:gap-16 py-8 md:py-10 animate-marquee whitespace-nowrap text-bone/50">
             {[...Array(2)].flatMap((_, i) =>
-              ["Atelier Group", "Casa Mira", "Ember", "House of Luna", "Noir Coffee", "Ostara", "Velvet", "North Yard"].map((b) => (
-                <span key={`${i}-${b}`} className="font-display text-2xl tracking-wide">{b} <span className="text-gold mx-8">◆</span></span>
+              ["Tamtara", "Spice Theory", "Mukbang", "Traders", "Zostal Phuket", "Brickhaus", "Kakapo", "Goa International Airport", "Rabbit Hole", "Fauxy India", "Imlee", "House of Desire", "Huboho", "Papilion", "Wild Sugar", "Raasta", "Agent Jack's"].map((b) => (
+                <span key={`${i}-${b}`} className="font-display text-xl md:text-2xl tracking-wide hover:text-gold transition-colors duration-500 inline-flex items-center gap-6 md:gap-10">
+                  {b} <span className="text-gold/70">◆</span>
+                </span>
               ))
             )}
           </div>
