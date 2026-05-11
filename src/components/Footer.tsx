@@ -50,7 +50,7 @@ export function Footer() {
           <div className="flex items-center gap-5">
             <a href="https://instagram.com/madmistri" target="_blank" rel="noreferrer" aria-label="Instagram" className="hover:text-gold"><Instagram size={16}/></a>
             <a href="https://facebook.com/madmistri" target="_blank" rel="noreferrer" aria-label="Facebook" className="hover:text-gold"><Facebook size={16}/></a>
-            <span className="hidden md:inline text-bone/30">Designed in Nagpur · Delivered across India</span>
+            <span className="hidden md:inline text-bone/40 tracking-[0.15em] uppercase text-[10px]">Designed by <a href="#" className="text-gold/80 hover:text-gold transition-colors">Renovae Agency — Ansh Shiv</a></span>
           </div>
         </div>
       </div>
