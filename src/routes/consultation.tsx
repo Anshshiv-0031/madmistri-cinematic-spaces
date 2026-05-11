@@ -40,6 +40,7 @@ function ConsultationPage() {
   const [step, setStep] = useState(0);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [done, setDone] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -49,10 +50,12 @@ function ConsultationPage() {
       const errs: Record<string, string> = {};
       parsed.error.issues.forEach((i) => { errs[i.path[0] as string] = i.message ?? "Required"; });
       setErrors(errs);
+      toast.error("Please fix the highlighted fields.");
       return;
     }
     setErrors({});
-    await supabase.from("leads").insert({
+    setLoading(true);
+    const { error } = await supabase.from("leads").insert({
       name: parsed.data.name,
       email: parsed.data.email,
       phone: parsed.data.phone,
@@ -60,7 +63,25 @@ function ConsultationPage() {
       message: `Business: ${parsed.data.business}\nPreferred date: ${parsed.data.date}\n${parsed.data.message ?? ""}`,
       source: "consultation-form",
     });
+    setLoading(false);
+    if (error) {
+      toast.error("Something went wrong. Please try again.");
+      return;
+    }
+    toast.success("Inquiry received — opening WhatsApp…");
     setDone(true);
+
+    const waMessage = `Hello Mad Mistri, I would like to discuss a commercial furniture project.
+
+Name: ${parsed.data.name}
+Phone: ${parsed.data.phone}
+Email: ${parsed.data.email}
+Business: ${parsed.data.business} (${parsed.data.type})
+Preferred date: ${parsed.data.date}
+${parsed.data.message ? `\nBrief: ${parsed.data.message}` : ""}`;
+    setTimeout(() => {
+      window.open(whatsappUrl(waMessage), "_blank", "noopener,noreferrer");
+    }, 800);
   };
 
   return (
