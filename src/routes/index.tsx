@@ -151,13 +151,13 @@ function Home() {
         <div aria-hidden className="absolute top-0 left-0 right-0 h-px gold-line opacity-60" />
 
         {/* Content */}
-        <div className="relative z-10 h-full mx-auto max-w-[1400px] px-6 md:px-10 flex flex-col justify-end pb-28 md:pb-36">
+        <div className="relative z-10 min-h-[100svh] mx-auto max-w-[1400px] px-6 md:px-10 flex flex-col justify-end pt-32 pb-32 sm:pb-36 md:pb-40">
           <div className="max-w-5xl">
-            <p className="animate-fade-up text-[11px] uppercase tracking-[0.45em] text-gold mb-8 flex items-center gap-3">
-              <span className="inline-block w-12 h-px bg-gold" />
-              Luxury Commercial Interiors · Est. India
+            <p className="animate-fade-up text-[10px] sm:text-[11px] uppercase tracking-[0.35em] sm:tracking-[0.45em] text-gold mb-6 sm:mb-8 flex items-center gap-3">
+              <span className="inline-block w-8 sm:w-12 h-px bg-gold" />
+              <span className="leading-snug">Luxury Commercial Interiors · Est. India</span>
             </p>
-            <h1 className="font-display leading-[0.9] text-balance text-shadow-cinema text-[46px] sm:text-6xl md:text-7xl lg:text-[104px]">
+            <h1 className="font-display leading-[0.95] sm:leading-[0.9] text-balance text-shadow-cinema text-[34px] xs:text-[40px] sm:text-5xl md:text-6xl lg:text-7xl xl:text-[96px]">
               <span className="block animate-fade-up delay-100">Crafting luxury spaces</span>
               <span className="block animate-fade-up delay-300">
                 that leave{" "}
@@ -167,13 +167,13 @@ function Home() {
                 </span>
               </span>
             </h1>
-            <p className="animate-fade-up delay-500 mt-10 max-w-xl text-bone/85 text-base md:text-lg leading-relaxed text-shadow-cinema">
+            <p className="animate-fade-up delay-500 mt-6 sm:mt-8 md:mt-10 max-w-xl text-bone/85 text-sm sm:text-base md:text-lg leading-relaxed text-shadow-cinema">
               From intimate cafés to landmark hotels — Mad Mistri designs and manufactures bespoke commercial furniture and turnkey interiors for India's most considered hospitality brands.
             </p>
-            <div className="animate-fade-up delay-700 mt-12 flex flex-wrap gap-4">
+            <div className="animate-fade-up delay-700 mt-8 sm:mt-10 md:mt-12 flex flex-wrap gap-3 sm:gap-4">
               <Link
                 to="/projects"
-                className="group relative inline-flex items-center gap-3 bg-gold text-ink px-8 py-4 text-xs uppercase tracking-[0.3em] font-medium overflow-hidden transition-all duration-500 hover:gold-glow hover:-translate-y-0.5"
+                className="group relative inline-flex items-center gap-2 sm:gap-3 bg-gold text-ink px-6 sm:px-8 py-3.5 sm:py-4 text-[11px] sm:text-xs uppercase tracking-[0.25em] sm:tracking-[0.3em] font-medium overflow-hidden transition-all duration-500 hover:gold-glow hover:-translate-y-0.5"
               >
                 <span className="relative z-10">View Projects</span>
                 <ArrowUpRight size={16} className="relative z-10 transition-transform duration-500 group-hover:translate-x-1 group-hover:-translate-y-1" />
@@ -182,7 +182,7 @@ function Home() {
               </Link>
               <Link
                 to="/consultation"
-                className="group relative inline-flex items-center gap-3 glass-dark text-bone px-8 py-4 text-xs uppercase tracking-[0.3em] transition-all duration-500 hover:border-gold hover:text-gold hover:-translate-y-0.5"
+                className="group relative inline-flex items-center gap-2 sm:gap-3 glass-dark text-bone px-6 sm:px-8 py-3.5 sm:py-4 text-[11px] sm:text-xs uppercase tracking-[0.25em] sm:tracking-[0.3em] transition-all duration-500 hover:border-gold hover:text-gold hover:-translate-y-0.5"
               >
                 Book Consultation
                 <span aria-hidden className="w-1.5 h-1.5 rounded-full bg-gold transition-transform duration-500 group-hover:scale-150" />
@@ -192,8 +192,7 @@ function Home() {
         </div>
 
         {/* Scroll cue */}
-        <div className="absolute bottom-24 md:bottom-28 left-1/2 -translate-x-1/2 z-10 hidden sm:flex flex-col items-center gap-3 animate-fade-in delay-700">
-          <span className="absolute inset-x-[-1px] top-0 h-4 bg-gold animate-scroll-hint mb-0 mt-[40px] my-0"> </span>
+        <div className="absolute bottom-24 md:bottom-28 left-1/2 -translate-x-1/2 z-10 hidden sm:flex flex-col items-center gap-3 animate-fade-in delay-700 pointer-events-none">
           <span className="relative block w-px h-10 bg-bone/20 overflow-hidden">
             <span className="absolute inset-x-[-1px] top-0 h-4 bg-gold animate-scroll-hint" />
           </span>
