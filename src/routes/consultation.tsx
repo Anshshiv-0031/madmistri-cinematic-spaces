@@ -123,10 +123,21 @@ ${parsed.data.message ? `\nBrief: ${parsed.data.message}` : ""}`;
 
           <div className="md:col-span-8">
             {done ? (
-              <div className="bg-ink text-bone p-12 md:p-16 text-center">
-                <p className="text-[11px] uppercase tracking-[0.3em] text-gold mb-4">Received</p>
-                <h2 className="font-display text-4xl md:text-5xl mb-4">Thank you.</h2>
-                <p className="text-bone/60 max-w-md mx-auto">A member of our studio will reach out within one working day to confirm your consultation.</p>
+              <div className="bg-ink text-bone p-10 sm:p-12 md:p-16 text-center animate-fade-up">
+                <div className="mx-auto w-16 h-16 rounded-full border border-gold/40 grid place-items-center mb-6 animate-glow-pulse">
+                  <Check size={28} className="text-gold" />
+                </div>
+                <p className="text-[11px] uppercase tracking-[0.3em] text-gold mb-3">Inquiry Received</p>
+                <h2 className="font-display text-3xl sm:text-4xl md:text-5xl mb-4">Thank you.</h2>
+                <p className="text-bone/70 max-w-md mx-auto mb-8">We've opened a WhatsApp chat with the studio so we can confirm details right away. Our team will respond within one working day.</p>
+                <a
+                  href={whatsappUrl("Hello Mad Mistri, I would like to discuss a commercial furniture project.")}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-3 bg-gold text-ink px-7 py-4 text-xs uppercase tracking-[0.25em] hover:bg-bone transition-all"
+                >
+                  Open WhatsApp Chat →
+                </a>
               </div>
             ) : (
               <form onSubmit={onSubmit} className="bg-ink text-bone p-8 md:p-12">
