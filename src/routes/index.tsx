@@ -228,11 +228,15 @@ function Home() {
             </div>
           ))}
         </div>
-        <div className="border-t border-bone/10 overflow-hidden">
-          <div className="flex gap-16 py-8 animate-marquee whitespace-nowrap text-bone/40">
+        <div className="border-t border-bone/10 overflow-hidden relative">
+          <div aria-hidden className="pointer-events-none absolute inset-y-0 left-0 w-24 md:w-40 z-10 bg-gradient-to-r from-ink to-transparent" />
+          <div aria-hidden className="pointer-events-none absolute inset-y-0 right-0 w-24 md:w-40 z-10 bg-gradient-to-l from-ink to-transparent" />
+          <div className="flex gap-10 md:gap-16 py-8 md:py-10 animate-marquee whitespace-nowrap text-bone/50">
             {[...Array(2)].flatMap((_, i) =>
-              ["Atelier Group", "Casa Mira", "Ember", "House of Luna", "Noir Coffee", "Ostara", "Velvet", "North Yard"].map((b) => (
-                <span key={`${i}-${b}`} className="font-display text-2xl tracking-wide">{b} <span className="text-gold mx-8">◆</span></span>
+              ["Tamtara", "Spice Theory", "Mukbang", "Traders", "Zostal Phuket", "Brickhaus", "Kakapo", "Goa International Airport", "Rabbit Hole", "Fauxy India", "Imlee", "House of Desire", "Huboho", "Papilion", "Wild Sugar", "Raasta", "Agent Jack's"].map((b) => (
+                <span key={`${i}-${b}`} className="font-display text-xl md:text-2xl tracking-wide hover:text-gold transition-colors duration-500 inline-flex items-center gap-6 md:gap-10">
+                  {b} <span className="text-gold/70">◆</span>
+                </span>
               ))
             )}
           </div>
