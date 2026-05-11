@@ -127,10 +127,12 @@ ${parsed.data.message}`;
               <textarea name="message" rows={4} maxLength={1000} className="w-full bg-transparent border-b border-bone/20 py-3 text-base text-bone focus:outline-none focus:border-gold transition-colors resize-none"/>
               {errors.message && <p className="text-xs text-destructive mt-1">{errors.message}</p>}
             </div>
-            <button type="submit" className="mt-4 inline-flex items-center gap-3 bg-gold text-ink px-7 py-4 text-xs uppercase tracking-[0.25em] hover:bg-bone transition-all duration-500">
-              Send Inquiry
+            <button type="submit" disabled={loading} className="mt-4 inline-flex items-center gap-3 bg-gold text-ink px-7 py-4 text-xs uppercase tracking-[0.25em] hover:bg-bone transition-all duration-500 disabled:opacity-70">
+              {loading ? (<><Loader2 size={14} className="animate-spin"/> Sending…</>) : "Send Inquiry"}
             </button>
-            {status === "ok" && <p className="text-sm text-gold">Thank you — we'll be in touch within one working day.</p>}
+            {status === "ok" && (
+              <p className="text-sm text-gold inline-flex items-center gap-2"><Check size={14}/> Thank you — opening WhatsApp to continue the conversation.</p>
+            )}
           </form>
         </div>
       </section>
