@@ -183,9 +183,11 @@ ${parsed.data.message ? `\nBrief: ${parsed.data.message}` : ""}`;
                       <label className="block text-[10px] uppercase tracking-[0.3em] text-bone/50 mb-2">Project Brief (optional)</label>
                       <textarea name="message" rows={4} maxLength={1000} className="w-full bg-transparent border-b border-bone/20 py-3 text-base text-bone focus:outline-none focus:border-gold transition-colors resize-none"/>
                     </div>
-                    <div className="flex gap-3">
-                      <button type="button" onClick={() => setStep(0)} className="border border-bone/30 text-bone px-7 py-4 text-xs uppercase tracking-[0.25em] hover:border-gold hover:text-gold transition-all">← Back</button>
-                      <button type="submit" className="bg-gold text-ink px-7 py-4 text-xs uppercase tracking-[0.25em] hover:bg-bone transition-all">Book Consultation</button>
+                    <div className="flex flex-wrap gap-3">
+                      <button type="button" disabled={loading} onClick={() => setStep(0)} className="border border-bone/30 text-bone px-7 py-4 text-xs uppercase tracking-[0.25em] hover:border-gold hover:text-gold transition-all disabled:opacity-50">← Back</button>
+                      <button type="submit" disabled={loading} className="inline-flex items-center gap-3 bg-gold text-ink px-7 py-4 text-xs uppercase tracking-[0.25em] hover:bg-bone transition-all disabled:opacity-70">
+                        {loading ? (<><Loader2 size={14} className="animate-spin" /> Sending…</>) : "Book Consultation"}
+                      </button>
                     </div>
                   </div>
                 )}
